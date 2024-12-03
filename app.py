@@ -7,11 +7,10 @@ import folium
 import math
 
 # Load the trained models
-knn_model = joblib.load('/content/drive/MyDrive/Modelf12/best_knn_model.joblib')
-rf_model = joblib.load('/content/drive/MyDrive/Modelf12/best_rf_model.joblib')
-xgb_model = joblib.load('/content/drive/MyDrive/Modelf12/best_xgb_model.joblib')
-model_path = '/content/drive/MyDrive/Modelf12/stack_ann_model.pkl'
-meta_ann = joblib.load(model_path)
+knn_model = joblib.load('best_knn_model.joblib')
+rf_model = joblib.load('best_rf_model.joblib')
+xgb_model = joblib.load('best_xgb_model.joblib')
+meta_ann = joblib.load('stack_ann_model.pkl')
 base_models = [knn_model, rf_model, xgb_model] 
 # Category mapping
 category_mapping = {
