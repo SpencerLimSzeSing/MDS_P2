@@ -2,7 +2,7 @@ streamlit
 numpy
 pandas
 joblib
-folium
-streamlit-folium
-scikit-learn
+xgboost
 tensorflow
+scikit-learn
+streamlit-folium
