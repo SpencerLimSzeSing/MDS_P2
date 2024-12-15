@@ -8,29 +8,6 @@ import folium
 import math
 
 
-@st.cache_resource
-def load_knn_model():
-    return joblib.load('best_knn_model.joblib')
-
-@st.cache_resource
-def load_rf_model():
-    return joblib.load('best_rf_model.joblib')
-
-@st.cache_resource
-def load_xgb_model():
-    return joblib.load('best_xgb_model.joblib')
-
-@st.cache_resource
-def load_meta_ann_model():
-    return tf.keras.models.load_model('Tuned_meta_ann_model.keras', compile=False)
-    
-if st.button("Predict"):
-    st.write("Loading models...")  # Optional loading message
-    knn_model = load_knn_model()
-    rf_model = load_rf_model()
-    xgb_model = load_xgb_model()
-    meta_ann = load_meta_ann_model()
-
 import base64
 def get_base64_image(file_path):
     """Convert image file to Base64."""
@@ -70,15 +47,6 @@ category_mapping = {
     2: 'Rainfall_Category_Heavy Rain',
     3: 'Rainfall_Category_Very Heavy Rain'
 }
-
-
-display_mapping = {
-    'Rainfall_Category_No Rain': 'No Rain (0 mm to 5 mm)',
-    'Rainfall_Category_Moderate Rain': 'Moderate Rain (5 mm to 20 mm)',
-    'Rainfall_Category_Heavy Rain': 'Heavy Rain (20 mm to 50 mm)',
-    'Rainfall_Category_Very Heavy Rain': 'Very Heavy Rain (50 mm and higher)'
-}
-
 
 # Streamlit app title
 st.title("Rainfall Prediction App")
@@ -349,21 +317,15 @@ display_mapping = {
 }
 
 
-
-if st.button("Predict"):
-    st.write("### Predicting Rainfall Category...")
-    
-
-
 if st.button("Predict"):
     st.write("### Predicting Rainfall Category...")
 
 
     # Load models lazily
-    knn_model = load_knn_model()
-    rf_model = load_rf_model()
-    xgb_model = load_xgb_model()
-    meta_ann = load_meta_ann_model()
+    #knn_model = load_knn_model()
+    #rf_model = load_rf_model()
+    #xgb_model = load_xgb_model()
+    #meta_ann = load_meta_ann_model()
 
     # Base model predictions
     knn_pred = knn_model.predict(input_features)[0]
