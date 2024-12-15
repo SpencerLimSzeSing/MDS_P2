@@ -7,6 +7,23 @@ from streamlit_folium import st_folium
 import folium
 import math
 
+@st.cache_resource
+def load_knn_model():
+    return joblib.load('best_knn_model.joblib')
+
+@st.cache_resource
+def load_rf_model():
+    return joblib.load('best_rf_model.joblib')
+
+@st.cache_resource
+def load_xgb_model():
+    return joblib.load('best_xgb_model.joblib')
+
+@st.cache_resource
+def load_meta_ann_model():
+    return tf.keras.models.load_model('Tuned_meta_ann_model.keras', compile=False)
+    
+
 
 import base64
 def get_base64_image(file_path):
@@ -315,6 +332,7 @@ display_mapping = {
     'Rainfall_Category_Heavy Rain': 'Heavy Rain (20 mm to 50 mm)',
     'Rainfall_Category_Very Heavy Rain': 'Very Heavy Rain (50 mm and higher)'
 }
+
 
 
 if st.button("Predict"):
