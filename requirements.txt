@@ -6,3 +6,4 @@ pandas==2.2.3
 folium==0.19.2
 scikit-learn==1.6.0
 tensorflow==2.18.0
+xgboost==2.1.3
