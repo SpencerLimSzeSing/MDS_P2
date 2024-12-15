@@ -13,8 +13,7 @@ rf_model = joblib.load('best_rf_model.joblib')
 xgb_model = joblib.load('best_xgb_model.joblib')
 
 # ANN Model
-meta_ann = tf.keras.models.load_model('Tuned_meta_ann_model.keras')
-
+meta_ann = tf.keras.models.load_model('Tuned_meta_ann_model.keras', compile=False)
 
 base_models = [knn_model, rf_model, xgb_model]
 # Category mapping
