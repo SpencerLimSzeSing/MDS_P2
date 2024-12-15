@@ -7,6 +7,7 @@ from streamlit_folium import st_folium
 import folium
 import math
 
+
 @st.cache_resource
 def load_knn_model():
     return joblib.load('best_knn_model.joblib')
@@ -30,6 +31,36 @@ if st.button("Predict"):
     xgb_model = load_xgb_model()
     meta_ann = load_meta_ann_model()
 
+import base64
+def get_base64_image(file_path):
+    """Convert image file to Base64."""
+    with open(file_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
+
+# Model loading with caching
+@st.cache_resource
+def load_knn_model():
+    return joblib.load('models/best_knn_model.joblib')
+
+@st.cache_resource
+def load_rf_model():
+    return joblib.load('models/best_rf_model.joblib')
+
+@st.cache_resource
+def load_xgb_model():
+    return joblib.load('models/best_xgb_model.joblib')
+
+@st.cache_resource
+def load_meta_ann_model():
+    return tf.keras.models.load_model('models/Tuned_meta_ann_model.keras', compile=False)
+    
+# Pre-load models (will only load once due to caching)
+knn_model = load_knn_model()
+rf_model = load_rf_model()
+xgb_model = load_xgb_model()
+meta_ann = load_meta_ann_model()
+
+
 
 base_models = [knn_model, rf_model, xgb_model]
 # Category mapping
@@ -41,10 +72,49 @@ category_mapping = {
 }
 
 
+display_mapping = {
+    'Rainfall_Category_No Rain': 'No Rain (0 mm to 5 mm)',
+    'Rainfall_Category_Moderate Rain': 'Moderate Rain (5 mm to 20 mm)',
+    'Rainfall_Category_Heavy Rain': 'Heavy Rain (20 mm to 50 mm)',
+    'Rainfall_Category_Very Heavy Rain': 'Very Heavy Rain (50 mm and higher)'
+}
+
+
 # Streamlit app title
 st.title("Rainfall Prediction App")
 st.write("Predict rainfall category based on climatic factors.")
 st.header("Input Features")
+
+
+# Function to add a background image
+def add_bg_from_local(image_file):
+    """
+    Adds a background image to a Streamlit app.
+
+    Parameters:
+    - image_file: Path to the local image file
+    """
+    with open(image_file, "rb") as f:
+        encoded_image = base64.b64encode(f.read()).decode()
+    
+    # Inject CSS to set the background image
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/png;base64,{encoded_image}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Add the background image (call the function)
+add_bg_from_local("assets/pexels.jpg")  
+
 
 # Helper function for styling sections
 def styled_section(header, color):
@@ -270,6 +340,7 @@ input_features = np.array([[min_temp, max_temp, evaporation, wind_gust_speed, wi
                             avg_humidity, avg_temperature, temp_range, temp_sunshine_interaction,
                             pressure_difference, temp_difference]])
 
+
 display_mapping = {
     'Rainfall_Category_No Rain': 'No Rain (0 mm to 5 mm)',
     'Rainfall_Category_Moderate Rain': 'Moderate Rain (5 mm to 20 mm)',
@@ -282,6 +353,12 @@ display_mapping = {
 if st.button("Predict"):
     st.write("### Predicting Rainfall Category...")
     
+
+
+if st.button("Predict"):
+    st.write("### Predicting Rainfall Category...")
+
+
     # Load models lazily
     knn_model = load_knn_model()
     rf_model = load_rf_model()
@@ -300,5 +377,27 @@ if st.button("Predict"):
     meta_pred_label = category_mapping[meta_pred_class]
     meta_pred_display = display_mapping[meta_pred_label]
 
+
     # Display result
     st.write(f"### Predicted Category: **{meta_pred_display}**")
+
+    # Load Base64 icon dynamically
+    icon_mapping = {
+        'Rainfall_Category_No Rain': get_base64_image('assets/rain1.png'),
+        'Rainfall_Category_Moderate Rain': get_base64_image('assets/rain2.png'),
+        'Rainfall_Category_Heavy Rain': get_base64_image('assets/rain3.png'),
+        'Rainfall_Category_Very Heavy Rain': get_base64_image('assets/rain4.png')
+    }
+    icon_file = icon_mapping[meta_pred_label]  # Get corresponding icon file
+
+    # Display result with icon
+    st.markdown(
+        f"""
+        <div style="display: flex; align-items: center; justify-content: flex-start;">
+            <h3 style="margin: 0; color: white;">Predicted Category: {meta_pred_display}</h3>
+            <img src="data:image/png;base64,{icon_file}" width="100" style="margin-left: 10px;"/>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
