@@ -7,13 +7,29 @@ from streamlit_folium import st_folium
 import folium
 import math
 
-#  Relative paths for Streamlit deployment
-knn_model = joblib.load('best_knn_model.joblib')
-rf_model = joblib.load('best_rf_model.joblib')
-xgb_model = joblib.load('best_xgb_model.joblib')
+@st.cache_resource
+def load_knn_model():
+    return joblib.load('best_knn_model.joblib')
 
-# ANN Model
-meta_ann = tf.keras.models.load_model('Tuned_meta_ann_model.keras', compile=False)
+@st.cache_resource
+def load_rf_model():
+    return joblib.load('best_rf_model.joblib')
+
+@st.cache_resource
+def load_xgb_model():
+    return joblib.load('best_xgb_model.joblib')
+
+@st.cache_resource
+def load_meta_ann_model():
+    return tf.keras.models.load_model('Tuned_meta_ann_model.keras', compile=False)
+    
+if st.button("Predict"):
+    st.write("Loading models...")  # Optional loading message
+    knn_model = load_knn_model()
+    rf_model = load_rf_model()
+    xgb_model = load_xgb_model()
+    meta_ann = load_meta_ann_model()
+
 
 base_models = [knn_model, rf_model, xgb_model]
 # Category mapping
@@ -263,20 +279,26 @@ display_mapping = {
 
 
 
-# Predict button
 if st.button("Predict"):
-  # Simplified meta-feature generation without cross-validation
-    meta_features = np.array([[knn_model.predict(input_features)[0],
-                           rf_model.predict(input_features)[0],
-                           xgb_model.predict(input_features)[0]]])
+    st.write("### Predicting Rainfall Category...")
+    
+    # Load models lazily
+    knn_model = load_knn_model()
+    rf_model = load_rf_model()
+    xgb_model = load_xgb_model()
+    meta_ann = load_meta_ann_model()
 
-    # Pass the meta-features to the meta-learner for final prediction
+    # Base model predictions
+    knn_pred = knn_model.predict(input_features)[0]
+    rf_pred = rf_model.predict(input_features)[0]
+    xgb_pred = xgb_model.predict(input_features)[0]
+
+    # Simplified meta-features
+    meta_features = np.array([[knn_pred, rf_pred, xgb_pred]])
     meta_pred = meta_ann.predict(meta_features)
     meta_pred_class = np.argmax(meta_pred, axis=1)[0]
-    meta_pred_label = category_mapping[meta_pred_class]  # Map to original label
-    meta_pred_display = display_mapping[meta_pred_label]  # Map to descriptive display label
+    meta_pred_label = category_mapping[meta_pred_class]
+    meta_pred_display = display_mapping[meta_pred_label]
 
-    # Display the result
-    st.write("### Predicted Rainfall Category")
-    st.write(f"The predicted category is: **{meta_pred_display}**")
-
+    # Display result
+    st.write(f"### Predicted Category: **{meta_pred_display}**")
