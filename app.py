@@ -256,8 +256,7 @@ input_features = np.array([[min_temp, max_temp, evaporation, wind_gust_speed, wi
 
 display_mapping = {
     'Rainfall_Category_No Rain': 'No Rain (0 mm to 5 mm)',
-    'Rainfall_Category_Light Rain': 'Light Rain (5 mm to 10 mm)',
-    'Rainfall_Category_Moderate Rain': 'Moderate Rain (10 mm to 20 mm)',
+    'Rainfall_Category_Moderate Rain': 'Moderate Rain (5 mm to 20 mm)',
     'Rainfall_Category_Heavy Rain': 'Heavy Rain (20 mm to 50 mm)',
     'Rainfall_Category_Very Heavy Rain': 'Very Heavy Rain (50 mm and higher)'
 }
