@@ -1,9 +1,8 @@
 scikit-learn==1.5.2
-streamlit
-numpy
-pandas
-joblib
-scikit-learn
-tensorflow
-streamlit-folium
-xgboost
+tensorflow==2.18.0
+joblib==1.4.2
+streamlit==1.41.1
+streamlit-folium==0.23.2
+numpy==2.0.2
+pandas==2.2.3
+folium==0.19.2
