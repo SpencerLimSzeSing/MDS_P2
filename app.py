@@ -7,14 +7,14 @@ from streamlit_folium import st_folium
 import folium
 import math
 
-# Load the trained models
-knn_model = joblib.load('/content/drive/MyDrive/Modelf14/best_knn_model.joblib')
-rf_model = joblib.load('/content/drive/MyDrive/Modelf14/best_rf_model.joblib')
-xgb_model = joblib.load('/content/drive/MyDrive/Modelf14/best_xgb_model.joblib')
+#  Relative paths for Streamlit deployment
+knn_model = joblib.load('best_knn_model.joblib')
+rf_model = joblib.load('best_rf_model.joblib')
+xgb_model = joblib.load('best_xgb_model.joblib')
 
-# Load the ANN model
-model_path = '/content/drive/MyDrive/Modelf14/Tuned_meta_ann_model.keras'
-meta_ann = tf.keras.models.load_model(model_path)
+# ANN Model
+meta_ann = tf.keras.models.load_model('Tuned_meta_ann_model.keras')
+
 
 base_models = [knn_model, rf_model, xgb_model]
 # Category mapping
