@@ -339,10 +339,6 @@ if st.button("Predict"):
     meta_pred_label = category_mapping[meta_pred_class]
     meta_pred_display = display_mapping[meta_pred_label]
 
-
-    # Display result
-    st.write(f"### Predicted Category: **{meta_pred_display}**")
-
     # Load Base64 icon dynamically
     icon_mapping = {
         'Rainfall_Category_No Rain': get_base64_image('assets/rain1.png'),
