@@ -95,7 +95,7 @@ add_bg_from_local("assets/pexels.jpg")
 
 # Load dataset
 def load_data():
-    file_path = "C:/Users/User/Desktop/P1/Deploy3/tab3/datasetdeploy.csv"
+    file_path = "tab3/datasetdeploy.csv"
     return pd.read_csv(file_path)
 
 data = load_data()
