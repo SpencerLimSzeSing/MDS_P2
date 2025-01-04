@@ -556,6 +556,7 @@ with tab3:
         (data['Date'] <= pd.to_datetime(date_range[1]))
     ]
 
+
     # Ensure Location_Target_Encoded column exists
     from sklearn.preprocessing import LabelEncoder
 
