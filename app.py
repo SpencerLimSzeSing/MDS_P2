@@ -471,12 +471,60 @@ with tab2:
         }
         icon_file = icon_mapping[meta_pred_label]  # Get corresponding icon file
 
-        # Display result with icon
+        # Additional information mapping for categories
+        category_info = {
+            'Rainfall_Category_No Rain': """
+            - **Conditions**: Dry weather, no precipitation.
+            - **Impact**: Ideal for outdoor activities.
+            """,
+            'Rainfall_Category_Light Rain': """
+            - **Conditions**: A gentle drizzle rainfall.
+            - **Impact**: Minimal disruption to daily activities, but outdoor activities may not be convenient.
+            """,
+            'Rainfall_Category_Moderate Rain': """
+            - **Conditions**: A consistent moderate rainfall.
+            - **Impact**: May require umbrellas or raincoats for outdoor activities. Some potential for minor disruptions to transportation and outdoor events.
+            """,
+            'Rainfall_Category_Heavy Rain': """
+            - **Conditions**: Intense rainfall, potentially with strong winds and thunderstorms.
+            - **Impact**: Significant disruption to daily life, including transportation delays, road closures, and potential flooding in low-lying areas.
+            """,
+            'Rainfall_Category_Very Heavy Rain': """
+            - **Conditions**: Unusually heavy downpour, often comes with strong winds and thunderstorms.
+            - **Impact**: It is recommended to stay indoors. Potentially leading to flash flooding, stay alert if it happens on consecutive days.
+            """
+        }
+
+        # Fetch the description dynamically based on the predicted label
+        predicted_category_description = category_info.get(meta_pred_label, "No description available.")
+
+        # Display the result with the correct description
         st.markdown(
             f"""
-            <div style="display: flex; align-items: center; justify-content: flex-start;">
-                <h3 style="margin: 0; color: white;">Predicted Category: {meta_pred_display}</h3>
-                <img src="data:image/png;base64,{icon_file}" width="100" style="margin-left: 10px;"/>
+            <div style="background-color: #ffffff; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <h2 style="color: #000;">Predicted Rainfall Category:</h2>
+                <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px;">
+                    <h3 style="margin: 0; color: #000;">{meta_pred_display}</h3>
+                    <img src="data:image/png;base64,{icon_file}" width="80" style="margin-left: 10px;"/>
+                </div>
+                <ul style="color: #000; list-style-type: disc; padding-left: 20px;">
+                    {predicted_category_description}
+                </ul>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        # Additional considerations section
+        st.markdown(
+            """
+            <div style="background-color: #ffffff; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <h2 style="color: #000;">Additional Considerations</h2>
+                <ul style="color: #000; list-style-type: disc; padding-left: 20px;">
+                    <li>Rainfall patterns and intensity vary across Australia's diverse climate zones.</li>
+                    <li>For the most accurate and up-to-date information on rainfall conditions in Australia, please refer to the <a href="https://bom.gov.au/" target="_blank">Bureau of Meteorology website</a>.</li>
+                    <li>Heavy rain can be dangerous. Always prioritize safety and follow any evacuation orders or warnings from authorities.</li>
+                </ul>
             </div>
             """,
             unsafe_allow_html=True
